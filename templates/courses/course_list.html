@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Formations - Soft Skills Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- En-tête de la page -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 text-primary mb-3">
+                <i class="fas fa-graduation-cap me-3"></i>Nos Formations
+            </h1>
+            <p class="lead text-muted">Développez vos compétences relationnelles et professionnelles</p>
+        </div>
+    </div>
+
+    <!-- Filtres et recherche -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form method="get" class="d-flex">
+                <input type="text" name="q" class="form-control me-2" placeholder="Rechercher une formation..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" name="category" onchange="this.form.submit()">
+                <option value="">Toutes les catégories</option>
+                {% for category in categories %}
+                <option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Grille des formations -->
+    <div class="row">
+        <!-- Bloc PHP en dur -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm hover-lift">
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px; background-color: #777BB4;">
+                    <i class="fab fa-php fa-5x text-white"></i>
+                </div>
+                
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-2">
+                        <span class="badge bg-primary me-1">Développement Web</span>
+                    </div>
+                    
+                    <h5 class="card-title">Maîtrise de PHP 8</h5>
+                    <p class="card-text text-muted">Apprenez à développer des applications web dynamiques avec PHP 8...</p>
+                    
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-muted me-1"></i>
+                                <small class="text-muted">40 heures</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-muted me-1"></i>
+                                <small class="text-muted">250 inscrits</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 text-primary mb-0">199€</span>
+                            <a href="{% url 'courses:php_course_detail' %}" class="btn btn-outline-primary">
+                                Voir détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin du bloc PHP -->
+
+        <!-- Bloc Flutter en dur -->
+<div class="col-lg-4 col-md-6 mb-4">
+    <div class="card h-100 shadow-sm hover-lift">
+        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px; background-color: #02569B;">
+            <i class="fab fa-flutter fa-5x text-white"></i>
+        </div>
+        
+        <div class="card-body d-flex flex-column">
+            <div class="mb-2">
+                <span class="badge bg-primary me-1">Développement Mobile</span>
+            </div>
+            
+            <h5 class="card-title">Développement Mobile avec Flutter</h5>
+            <p class="card-text text-muted">Créez des applications mobiles multiplateformes avec Flutter et Dart...</p>
+            
+            <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-clock text-muted me-1"></i>
+                        <small class="text-muted">60 heures</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-users text-muted me-1"></i>
+                        <small class="text-muted">320 inscrits</small>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="h5 text-primary mb-0">299€</span>
+                    <a href="{% url 'courses:flutter_course_detail' %}" class="btn btn-outline-primary">
+                         Voir détails
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin du bloc Flutter -->
+
+        {% for course in courses %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm hover-lift">
+                {% if course.image %}
+                <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-book fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-2">
+                        <span class="badge bg-primary me-1">{{ course.category.name }}</span>
+                    </div>
+                    
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="card-text text-muted">{{ course.description|truncatewords:20 }}</p>
+                    
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-muted me-1"></i>
+                                <small class="text-muted">{{ course.duration_hours }} heures</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-muted me-1"></i>
+                                <small class="text-muted">{{ course.enrolled_students.count }} inscrits</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 text-primary mb-0">{{ course.price }}€</span>
+                            <a href="{% url 'courses:course_detail' course.slug %}" class="btn btn-outline-primary">
+                                Voir détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Aucune formation trouvée</h4>
+                <p class="text-muted">Essayez de modifier vos critères de recherche</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if courses.has_other_pages %}
+    <nav aria-label="Navigation des formations" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if courses.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for num in courses.paginator.page_range %}
+            {% if courses.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > courses.number|add:'-3' and num < courses.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if courses.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+.hover-lift {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    border-radius: 15px 15px 0 0;
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 8px 20px;
+}
+
+.form-control, .form-select {
+    border-radius: 25px;
+    border: 2px solid #e9ecef;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Style pour la section PHP */
+.php-badge {
+    background-color: #777BB4;
+    color: white;
+}
+
+.php-card .card-title {
+    color: #777BB4;
+    font-weight: 600;
+}
+
+/* Style pour la section Créativité et Innovation */
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e54c8, #8f94fb);
+}
+
+.card-header {
+    border-bottom: none;
+}
+</style>
+{% endblock %}

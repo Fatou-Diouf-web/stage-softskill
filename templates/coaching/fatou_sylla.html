@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fatou Sylla - Créativité et Innovation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Côté gauche - Photo et informations -->
+        <div class="col-lg-4">
+            <div class="card mb-4 border-0" style="background-color: #f8f9fa; border-radius: 15px;">
+                <div class="card-body text-center p-4">
+                    <div class="position-relative d-inline-block">
+                        <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mx-auto mb-3" 
+                             style="width: 150px; height: 150px;">
+                            <i class="fas fa-user-astronaut text-primary" style="font-size: 4rem;"></i>
+                        </div>
+                        <span class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2">
+                            <i class="fas fa-video"></i>
+                        </span>
+                    </div>
+                    
+                    <h4 class="mb-1">Fatou Sylla</h4>
+                    <p class="text-primary fw-bold mb-3">Créativité et Innovation</p>
+                    
+                    <!-- Note et expérience -->
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-1"></i>
+                            <span>4.5/5</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user-graduate text-primary me-1"></i>
+                            <span class="badge bg-success">10 ans d'expérience</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Localisation et tarif -->
+                    <div class="text-start mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-map-marker-alt text-muted me-2" style="width: 24px;"></i>
+                            <span>Dakar, Sénégal</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-euro-sign text-muted me-2" style="width: 24px;"></i>
+                            <span class="badge bg-primary">120€/h</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-globe text-muted me-2" style="width: 24px;"></i>
+                            <span>En ligne/Présentiel</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Bouton de réservation unique -->
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'coaching:book_session' coach_id=coach.id %}" class="btn btn-primary">
+                            <i class="fas fa-calendar-plus me-2"></i>Réserver une séance
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Côté droit - Détails -->
+        <div class="col-lg-8">
+            <!-- Section À propos -->
+            <div class="card border-0 mb-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">À propos de moi</h5>
+                    <p class="card-text">
+                        Experte en créativité appliquée avec 10 ans d'expérience dans l'accompagnement des professionnels vers l'innovation.
+                        Je vous aide à développer votre potentiel créatif et à mettre en œuvre des solutions innovantes dans votre domaine d'activité.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Section Compétences -->
+            <div class="card border-0 mb-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Compétences clés</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Stratégies d'innovation</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Design thinking</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Résolution créative de problèmes</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Gestion de l'innovation</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Animation d'ateliers créatifs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Expérience -->
+            <div class="card border-0" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Expérience professionnelle</h5>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="fas fa-briefcase text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Consultante en innovation créative</h6>
+                            <p class="text-muted mb-1">Entreprise Innovante | 2018 - Présent</p>
+                            <p class="mb-0">Accompagnement des entreprises dans leur transformation numérique et l'implémentation de méthodes créatives.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="fas fa-chalkboard-teacher text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Formatrice en créativité</h6>
+                            <p class="text-muted mb-1">Centre de Formation Professionnelle | 2015 - 2018</p>
+                            <p class="mb-0">Animation d'ateliers et de formations sur les techniques de créativité et d'innovation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn {
+        transition: all 0.3s ease;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Font Awesome est déjà inclus dans base.html -->
+{% endblock %}

@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ coach.user.get_full_name }} - Détails du coach{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    {% if coach.user.profile_picture %}
+                    <img src="{{ coach.user.profile_picture.url }}" 
+                         alt="{{ coach.user.get_full_name }}"
+                         class="rounded-circle img-fluid" style="width: 150px;">
+                    {% else %}
+                    <img src="/static/images/default-avatar.png"
+                         alt="{{ coach.user.get_full_name }}"
+                         class="rounded-circle img-fluid" style="width: 150px;">
+                    {% endif %}
+                    <h3 class="mt-3">{{ coach.user.get_full_name }}</h3>
+                    <p class="text-muted mb-1">{{ coach.specialization }}</p>
+                    <div class="mb-3">
+                        {% for _ in "12345" %}
+                            {% if forloop.counter <= coach.rating|default:0 %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                                <i class="far fa-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="ms-1">{{ coach.rating|default:"Aucune note" }}</span>
+                    </div>
+                    <div class="d-flex justify-content-center mb-3">
+                        <a href="{% url 'coaching:book_session' coach.id %}" class="btn btn-primary me-2">
+                            <i class="fas fa-calendar-plus me-1"></i> Réserver
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Informations</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span><i class="fas fa-briefcase me-2"></i>Expérience</span>
+                            <span class="badge bg-primary rounded-pill">{{ coach.experience_years }} ans</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span><i class="fas fa-euro-sign me-2"></i>Tarif horaire</span>
+                            <span class="fw-bold">{{ coach.hourly_rate }} €/h</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span><i class="fas fa-calendar-check me-2"></i>Disponibilité</span>
+                            <span class="badge bg-{{ coach.is_available|yesno:'success,danger' }}">
+                                {{ coach.is_available|yesno:"Disponible,Non disponible" }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">À propos de moi</h4>
+                    <p class="card-text">{{ coach.bio|linebreaksbr }}</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Disponibilités</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Jour</th>
+                                    <th>Matin</th>
+                                    <th>Après-midi</th>
+                                    <th>Soir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Lundi</strong></td>
+                                    <td><span class="badge bg-success">9h - 12h</span></td>
+                                    <td><span class="badge bg-success">14h - 18h</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mardi</strong></td>
+                                    <td><span class="badge bg-success">9h - 12h</span></td>
+                                    <td><span class="badge bg-success">14h - 18h</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mercredi</strong></td>
+                                    <td><span class="badge bg-success">9h - 12h</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jeudi</strong></td>
+                                    <td><span class="badge bg-success">9h - 12h</span></td>
+                                    <td><span class="badge bg-success">14h - 18h</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vendredi</strong></td>
+                                    <td><span class="badge bg-success">9h - 12h</span></td>
+                                    <td><span class="badge bg-success">14h - 17h</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Samedi</strong></td>
+                                    <td><span class="badge bg-warning text-dark">Sur RDV</span></td>
+                                    <td><span class="badge bg-warning text-dark">Sur RDV</span></td>
+                                    <td><span class="badge bg-secondary">Indisponible</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dimanche</strong></td>
+                                    <td colspan="3" class="text-center"><span class="badge bg-danger">Non disponible</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Les créneaux du samedi matin sont disponibles sur rendez-vous uniquement.
+                        <br>
+                        <i class="fas fa-info-circle me-2"></i>
+                        Pour toute demande de créneau en dehors des horaires indiqués, veuillez me contacter directement.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Script pour gérer la réservation de séance
+        const bookButton = document.querySelector('a[href*="book_session"]');
+        if (bookButton) {
+            bookButton.addEventListener('click', function(e) {
+                // Vérifier si le coach est disponible
+                const isAvailable = "{{ coach.is_available|lower }}" === "true";
+                if (!isAvailable) {
+                    e.preventDefault();
+                    alert("Ce coach n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.");
+                }
+            });
+        }
+
+        // Animation au survol des créneaux disponibles
+        const availableSlots = document.querySelectorAll('.badge.bg-success, .badge.bg-warning');
+        availableSlots.forEach(slot => {
+            slot.style.cursor = 'pointer';
+            slot.style.transition = 'all 0.2s ease';
+            
+            slot.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+            });
+            
+            slot.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = 'none';
+            });
+            
+            slot.addEventListener('click', function() {
+                const day = this.closest('tr').querySelector('td:first-child').textContent.trim();
+                const timeSlot = this.textContent.trim();
+                alert(`Souhaitez-vous réserver un créneau le ${day} de ${timeSlot} ?`);
+            });
+        });
+    });
+</script>
+
+<style>
+    /* Style pour les badges de disponibilité */
+    .badge {
+        font-size: 0.85em;
+        padding: 0.5em 0.75em;
+        border-radius: 0.25rem;
+    }
+    
+    .badge.bg-success {
+        background-color: #198754 !important;
+    }
+    
+    .badge.bg-warning {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+    }
+    
+    .badge.bg-secondary {
+        background-color: #6c757d !important;
+    }
+    
+    .badge.bg-danger {
+        background-color: #dc3545 !important;
+    }
+    
+    /* Style pour le tableau des disponibilités */
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+    
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+    
+    /* Style pour les cartes */
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Style pour les boutons */
+    .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+    }
+    
+    /* Style pour les icônes */
+    .fas.fa-star, .far.fa-star {
+        color: #ffc107;
+    }
+    
+    /* Style pour les alertes */
+    .alert-info {
+        background-color: #e7f5ff;
+        border-color: #d0ebff;
+        color: #055160;
+    }
+    
+    /* Style pour les écrans mobiles */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border: 0;
+        }
+        
+        .table thead {
+            display: none;
+        }
+        
+        .table tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+        
+        .table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .table td:last-child {
+            border-bottom: 0;
+        }
+    }
+</style>
+{% endblock %}

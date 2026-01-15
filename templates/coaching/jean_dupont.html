@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Jean Dupont - Gestion du Stress et Bien-être{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Côté gauche - Photo et informations -->
+        <div class="col-lg-4">
+            <div class="card mb-4 border-0" style="background-color: #f8f9fa; border-radius: 15px;">
+                <div class="card-body text-center p-4">
+                    <div class="position-relative d-inline-block">
+                        <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mx-auto mb-3" 
+                             style="width: 150px; height: 150px;">
+                            <i class="fas fa-user-nurse text-primary" style="font-size: 4rem;"></i>
+                        </div>
+                        <span class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2">
+                            <i class="fas fa-video"></i>
+                        </span>
+                    </div>
+                    
+                    <h4 class="mb-1">Jean Dupont</h4>
+                    <p class="text-primary fw-bold mb-3">Gestion du Stress et Bien-être</p>
+                    
+                    <!-- Note et expérience -->
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-1"></i>
+                            <span>4.8/5</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user-graduate text-primary me-1"></i>
+                            <span class="badge bg-success">8 ans d'expérience</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Localisation et tarif -->
+                    <div class="text-start mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-map-marker-alt text-muted me-2" style="width: 24px;"></i>
+                            <span>Dakar, Sénégal</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-euro-sign text-muted me-2" style="width: 24px;"></i>
+                            <span class="badge bg-primary">100€/h</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-globe text-muted me-2" style="width: 24px;"></i>
+                            <span>En ligne/Présentiel</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Bouton de réservation -->
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'coaching:book_session' coach.id %}" class="btn btn-primary">
+                            <i class="fas fa-calendar-plus me-2"></i>Réserver une séance
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Côté droit - Détails -->
+        <div class="col-lg-8">
+            <!-- Section À propos -->
+            <div class="card border-0 mb-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">À propos de moi</h5>
+                    <p class="card-text">
+                        Spécialiste en gestion du stress et bien-être avec 8 ans d'expérience, j'accompagne les professionnels à retrouver un équilibre de vie serein.
+                        Ma méthode allie techniques de relaxation avancées et conseils pratiques pour une gestion efficace du stress au quotidien.
+                    </p>
+                    <p class="card-text">
+                        Diplômé en psychologie du travail et certifié en sophrologie, j'ai développé une approche unique qui s'adapte aux besoins spécifiques de chaque personne.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Section Compétences -->
+            <div class="card border-0 mb-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Domaines d'expertise</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Gestion du stress professionnel</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Techniques de relaxation</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Gestion des émotions</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Équilibre vie pro/perso</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Prévention du burn-out</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Expérience -->
+            <div class="card border-0" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Parcours professionnel</h5>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="fas fa-hands-helping text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Consultant en gestion du stress</h6>
+                            <p class="text-muted mb-1">Cabinet ZenPro | 2019 - Présent</p>
+                            <p class="mb-0">Accompagnement personnalisé des cadres et dirigeants dans la gestion de leur stress professionnel.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="fas fa-chalkboard-teacher text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Formateur en bien-être au travail</h6>
+                            <p class="text-muted mb-1">Institut du Mieux-Être | 2015 - 2019</p>
+                            <p class="mb-0">Animation d'ateliers et de formations sur la gestion du stress en entreprise.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Méthodologie -->
+            <div class="card border-0 mt-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Ma méthode</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center p-3 bg-light rounded-3 h-100">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-search fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Bilan initial</h6>
+                                <p class="small text-muted mb-0">Analyse de vos besoins et de votre niveau de stress actuel</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center p-3 bg-light rounded-3 h-100">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-tools fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Outils personnalisés</h6>
+                                <p class="small text-muted mb-0">Techniques adaptées à votre situation professionnelle</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center p-3 bg-light rounded-3 h-100">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-chart-line fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Suivi personnalisé</h6>
+                                <p class="small text-muted mb-0">Accompagnement sur mesure pour des résultats durables</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn {
+        transition: all 0.3s ease;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Font Awesome est déjà inclus dans base.html -->
+{% endblock %}

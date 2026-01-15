@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ course.title }} - Soft Skills Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- En-tête de la formation -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'courses:home' %}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Formations</a></li>
+                    <li class="breadcrumb-item active">{{ course.title }}</li>
+                </ol>
+            </nav>
+            
+            <h1 class="display-5 fw-bold mb-3">{{ course.title }}</h1>
+            <p class="lead text-muted mb-4">{{ course.description }}</p>
+            
+            <div class="d-flex flex-wrap gap-3 mb-4">
+                <span class="badge bg-primary fs-6">{{ course.category.name }}</span>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                        <h5 class="fw-bold">{{ course.duration_hours }} heures</h5>
+                        <small class="text-muted">Durée</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                        <h5 class="fw-bold">{{ course.enrolled_students.count }}</h5>
+                        <small class="text-muted">Inscrits</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                        <h5 class="fw-bold">4.8/5</h5>
+                        <small class="text-muted">Note</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <i class="fas fa-level-up-alt fa-2x text-info mb-2"></i>
+                        <h5 class="fw-bold">{{ course.level|default:"Intermédiaire" }}</h5>
+                        <small class="text-muted">Niveau</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary fw-bold">{{ course.price }}€</h3>
+                        <p class="text-muted">Formation complète</p>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        {% if user in course.enrolled_students.all %}
+                        <a href="{% url 'courses:lesson_detail' course.slug 1 %}" class="btn btn-success w-100 mb-3">
+                            <i class="fas fa-play me-2"></i>Continuer la formation
+                        </a>
+                        {% else %}
+                        <a href="{% url 'courses:course_enroll' course.slug %}" class="btn btn-primary w-100 mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>S'inscrire maintenant
+                        </a>
+                        {% endif %}
+                    {% else %}
+                    <a href="{% url 'account_login' %}" class="btn btn-primary w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Se connecter pour s'inscrire
+                    </a>
+                    {% endif %}
+                    
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Garantie satisfait ou remboursé 30 jours
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image de la formation -->
+    {% if course.image %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <img src="{{ course.image.url }}" class="img-fluid rounded" alt="{{ course.title }}" style="max-height: 400px; width: 100%; object-fit: cover;">
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Contenu de la formation -->
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Programme -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-list me-2"></i>Programme de la formation</h4>
+                </div>
+                <div class="card-body">
+                    {% if course.lessons.all %}
+                    <div class="accordion" id="lessonsAccordion">
+                        {% for lesson in course.lessons.all %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ lesson.id }}">
+                                <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ lesson.id }}">
+                                    <div class="d-flex justify-content-between align-items-center w-100 me-3">
+                                        <span><strong>Leçon {{ lesson.order }}:</strong> {{ lesson.title }}</span>
+                                        <span class="badge bg-secondary">{{ lesson.duration }} min</span>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ lesson.id }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#lessonsAccordion">
+                                <div class="accordion-body">
+                                    <p class="text-muted">{{ lesson.description }}</p>
+                                    {% if user in course.enrolled_students.all %}
+                                    <a href="{% url 'courses:lesson_detail' course.slug lesson.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-play me-1"></i>Commencer
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Le programme détaillé sera bientôt disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Objectifs -->
+            {% if course.objectives %}
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-target me-2"></i>Objectifs de la formation</h4>
+                </div>
+                <div class="card-body">
+                    {{ course.objectives|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Prérequis -->
+            {% if course.prerequisites %}
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Prérequis</h4>
+                </div>
+                <div class="card-body">
+                    {{ course.prerequisites|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Bloc de paiement -->
+  <!-- Bloc de paiement -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Accès à la formation</h5>
+    </div>
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold">
+                {% if course.is_free %}
+                    <span class="text-success">Gratuit</span>
+                {% else %}
+                    {{ course.price }}€
+                {% endif %}
+            </h3>
+            <small class="text-muted">Accès à vie</small>
+        </div>
+
+        {% if user.is_authenticated %}
+            {% if user in course.enrolled_students.all %}
+                <a href="{% url 'courses:course_learning' course.slug %}" class="btn btn-success w-100 mb-2">
+                    <i class="fas fa-play-circle me-2"></i>Continuer la formation
+                </a>
+            {% else %}
+                <a href="{% url 'payments:course_payment' course.id %}" class="btn btn-primary w-100 mb-2">
+                    <i class="fas fa-credit-card me-2"></i>
+                    {% if course.is_free %}S'inscrire maintenant{% else %}Payer avec PayTech{% endif %}
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'account_login' %}?next={% url 'payments:course_payment' course.id %}" class="btn btn-primary w-100 mb-2">
+                <i class="fas fa-sign-in-alt me-2"></i>Se connecter pour s'inscrire
+            </a>
+        {% endif %}
+
+        <div class="text-center mt-3">
+            <a href="https://paytech.sn" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                <img src="{% static 'img/paytech-logo.png' %}" alt="PayTech" style="height: 24px;" class="me-2">
+                <span class="text-muted">
+                    <i class="fas fa-shield-alt me-1"></i> Paiement sécurisé par PayTech
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+            <!-- Formateur -->
+            {% if course.instructor %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Formateur</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">{{ course.instructor.get_full_name|default:course.instructor.username }}</h5>
+                    <p class="text-muted">{{ course.instructor.profile.bio|default:"Expert en soft skills" }}</p>
+                    <div class="d-flex justify-content-center">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <span class="ms-2 text-muted">(4.9)</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Avis -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Avis des participants</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <h2 class="text-warning fw-bold">4.8</h2>
+                        <div class="mb-2">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <small class="text-muted">Basé sur {{ course.enrolled_students.count }} avis</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small>5 étoiles</small>
+                            <small>85%</small>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-warning" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small>4 étoiles</small>
+                            <small>12%</small>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-warning" style="width: 12%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small>3 étoiles</small>
+                            <small>3%</small>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-warning" style="width: 3%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.sticky-top {
+    z-index: 1020;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e7f1ff;
+    color: #0d6efd;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0, 0, 0, 0.125);
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 8px 20px;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+}
+
+.breadcrumb-item a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.progress {
+    border-radius: 10px;
+}
+</style>
+{% endblock %}

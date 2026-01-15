@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Paiement - {{ course.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-option {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .payment-option .card {
+        border: 1px solid #dee2e6;
+        transition: all 0.3s;
+        height: 100%;
+    }
+    .payment-option:hover .card {
+        border-color: #0d6efd;
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    .payment-option i {
+        transition: transform 0.3s;
+    }
+    .payment-option:hover i {
+        transform: scale(1.1);
+    }
+    #payment-options {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    /* Styles pour le bouton principal */
+    #show-payment-options {
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        position: relative;
+        z-index: 1001;
+        transition: all 0.2s;
+    }
+    #show-payment-options:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #show-payment-options:active {
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Paiement de la formation</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="h5">{{ course.title }}</h3>
+                            <p class="text-muted">{{ course.short_description }}</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="h4 mb-0">
+                                    {% if course.is_free %}
+                                        Gratuit
+                                    {% else %}
+                                        {{ course.price }} €
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% if not course.is_free %}
+                                <div id="initial-payment-button" class="text-center">
+                                    <button type="button" 
+                                            id="show-payment-options" 
+                                            class="btn btn-primary btn-lg w-100"
+                                            onclick="handlePaymentButtonClick(event)">
+                                        <i class="fas fa-credit-card me-2"></i>Payer avec PayTech
+                                    </button>
+                                </div>
+
+                                <div id="payment-options" style="display: none;">
+                                    <div class="text-center mt-4">
+                                        <h5 class="mb-3">Choisissez votre moyen de paiement</h5>
+                                        <div class="row g-3">
+                                            <!-- Carte VISA -->
+                                            <div class="col-6 col-md-4">
+                                                <div class="payment-option" data-method="VISA" onclick="processPayment('VISA')">
+                                                    <div class="card h-100">
+                                                        <div class="card-body text-center p-2">
+                                                            <i class="fab fa-cc-visa fa-2x mb-2" style="color: #1A1F71;"></i>
+                                                            <p class="mb-0 small">Carte VISA</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Orange Money -->
+                                            <div class="col-6 col-md-4">
+                                                <div class="payment-option" data-method="ORANGEMONEY" onclick="processPayment('ORANGEMONEY')">
+                                                    <div class="card h-100">
+                                                        <div class="card-body text-center p-2">
+                                                            <i class="fas fa-mobile-alt fa-2x mb-2" style="color: #FF6600;"></i>
+                                                            <p class="mb-0 small">Orange Money</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Free Money -->
+                                            <div class="col-6 col-md-4">
+                                                <div class="payment-option" data-method="FREEMONEY" onclick="processPayment('FREEMONEY')">
+                                                    <div class="card h-100">
+                                                        <div class="card-body text-center p-2">
+                                                            <i class="fas fa-mobile-alt fa-2x mb-2" style="color: #00AFF0;"></i>
+                                                            <p class="mb-0 small">Free Money</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Wave -->
+                                            <div class="col-6 col-md-4">
+                                                <div class="payment-option" data-method="WAVE" onclick="processPayment('WAVE')">
+                                                    <div class="card h-100">
+                                                        <div class="card-body text-center p-2">
+                                                            <i class="fas fa-wave-square fa-2x mb-2" style="color: #00B2A9;"></i>
+                                                            <p class="mb-0 small">Wave</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Wizall -->
+                                            <div class="col-6 col-md-4">
+                                                <div class="payment-option" data-method="WIZALL" onclick="processPayment('WIZALL')">
+                                                    <div class="card h-100">
+                                                        <div class="card-body text-center p-2">
+                                                            <i class="fas fa-wallet fa-2x mb-2" style="color: #6A1B9A;"></i>
+                                                            <p class="mb-0 small">Wizall</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- E-Money -->
+                                            <div class="col-6 col-md-4">
+                                                <div class="payment-option" data-method="EMONEY" onclick="processPayment('EMONEY')">
+                                                    <div class="card h-100">
+                                                        <div class="card-body text-center p-2">
+                                                            <i class="fas fa-money-bill-wave fa-2x mb-2" style="color: #28A745;"></i>
+                                                            <p class="mb-0 small">E-Money</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <form method="post" action="{% url 'payments:course_payment' course.id %}">
+                                    {% csrf_token %}
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="fas fa-check-circle me-2"></i>Confirmer l'inscription
+                                        </button>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Fonction pour afficher les options de paiement
+function showPaymentOptions() {
+    console.log('showPaymentOptions appelé');
+    const initialButton = document.getElementById('initial-payment-button');
+    const paymentOptions = document.getElementById('payment-options');
+    
+    if (initialButton && paymentOptions) {
+        initialButton.style.display = 'none';
+        paymentOptions.style.display = 'block';
+    }
+}
+
+// Gestionnaire de clic direct
+function handlePaymentButtonClick(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    showPaymentOptions();
+    return false;
+}
+
+// Fonction pour traiter le paiement
+function processPayment(paymentMethod) {
+    console.log('Traitement du paiement:', paymentMethod);
+    const paymentOptions = document.getElementById('payment-options');
+    if (!paymentOptions) return;
+
+    paymentOptions.innerHTML = `
+        <div class="text-center p-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p class="mt-2">Redirection vers le service de paiement...</p>
+        </div>
+    `;
+
+    // Envoyer la requête au serveur
+    fetch("{% url 'payments:init_paytech_payment' course.id %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            payment_method: paymentMethod
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur réseau');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success && data.payment_url) {
+            window.location.href = data.payment_url;
+        } else {
+            showError('Erreur lors de l\\'initialisation du paiement. Veuillez réessayer.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError('Une erreur est survenue. Veuillez réessayer.');
+    });
+}
+
+function showError(message) {
+    const paymentOptions = document.getElementById('payment-options');
+    if (paymentOptions) {
+        paymentOptions.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>${message}
+                <button class="btn btn-sm btn-outline-secondary mt-2" onclick="window.location.reload()">
+                    <i class="fas fa-sync-alt me-1"></i> Réessayer
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM chargé');
+    const paymentButton = document.getElementById('show-payment-options');
+    if (paymentButton) {
+        // S'assurer que le bouton est cliquable
+        paymentButton.style.cursor = 'pointer';
+        paymentButton.style.pointerEvents = 'auto';
+    }
+});
+</script>
+{% endblock %}

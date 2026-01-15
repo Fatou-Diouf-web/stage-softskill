@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Traitement du paiement</h4>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="h4">Montant: {{ course.price }} FCFA</p>
+                    <p>Méthode de paiement: {{ payment_method|title }}</p>
+                    
+                    <div class="mt-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                        <p class="mt-2">Traitement de votre paiement en cours...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

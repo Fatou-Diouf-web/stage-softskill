@@ -1,0 +1,8 @@
+Django==5.1.5
+djangorestframework==3.16.1
+django-cors-headers==4.7.0
+Pillow==11.1.0
+python-decouple==3.8
+django-allauth==65.11.0
+django-crispy-forms==2.4
+crispy-bootstrap5==2025.6 

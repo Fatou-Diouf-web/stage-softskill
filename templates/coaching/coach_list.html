@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Coachs - Soft Skills Platform{% endblock %}
+
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Nos Coachs</h1>
+    <div class="row g-4">
+        <!-- Boucle pour afficher les coachs dynamiquement -->
+        {% for coach in coaches %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="text-center mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mx-auto mb-2" 
+                             style="width: 100px; height: 100px;">
+                            <i class="fas fa-user-graduate text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title">{{ coach.user.get_full_name }}</h5>
+                        <p class="card-text text-muted">{{ coach.specialization }}</p>
+                        <p class="card-text">{{ coach.bio|truncatewords:20 }}</p>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <span class="badge bg-success me-2">{{ coach.experience_years }} ans d'expérience</span>
+                            <span class="badge bg-primary">{{ coach.hourly_rate }}€/h</span>
+                        </div>
+                        <a href="{% url 'coaching:coach_detail' coach.id %}" class="btn btn-primary w-100">
+                            Voir le profil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

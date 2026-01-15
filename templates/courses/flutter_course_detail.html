@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Développement Mobile avec Flutter - Soft Skills Academy{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- En-tête avec image et titre -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-5 fw-bold mb-3">Développement Mobile avec Flutter</h1>
+            <p class="lead text-muted">Créez des applications mobiles multiplateformes avec Flutter et Dart</p>
+            <div class="d-flex justify-content-center gap-3 mb-4">
+                <span class="badge bg-primary">Développement Mobile</span>
+                <span class="text-muted"><i class="fas fa-clock me-1"></i> 60 heures</span>
+                <span class="text-muted"><i class="fas fa-users me-1"></i> 320 inscrits</span>
+            </div>
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-primary text-white px-4 fw-bold">Inscrire maintenant</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- À propos du cours -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-4">À propos de ce cours</h2>
+                    <p class="mb-4">Apprenez à développer des applications mobiles performantes et élégantes pour iOS et Android avec Flutter, le framework de développement multiplateforme de Google. Ce cours complet vous guidera à travers les concepts fondamentaux jusqu'aux fonctionnalités avancées.</p>
+                    
+                    <h3 class="h5 mb-3">Ce que vous apprendrez</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Les bases de Dart</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Widgets et interface utilisateur</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Gestion d'état avec Provider</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Persistance des données</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Consommation d'API REST</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Authentification</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Publication sur les stores</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Bonnes pratiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programme du cours -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-4">Programme du cours</h2>
+                    
+                    <div class="accordion" id="courseAccordion">
+                        <!-- Module 1 -->
+                        <div class="accordion-item mb-2 border-0">
+                            <h3 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Module 1 : Introduction à Flutter
+                                </button>
+                            </h3>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#courseAccordion">
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled">
+                                        <li class="py-2 border-bottom"><i class="far fa-play-circle text-muted me-2"></i> Présentation de Flutter</li>
+                                        <li class="py-2 border-bottom"><i class="far fa-play-circle text-muted me-2"></i> Installation de l'environnement</li>
+                                        <li class="py-2 border-bottom"><i class="far fa-play-circle text-muted me-2"></i> Découverte de Dart</li>
+                                        <li class="py-2"><i class="far fa-file-alt text-muted me-2"></i> Quiz d'évaluation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 2 -->
+                        <div class="accordion-item mb-2 border-0">
+                            <h3 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Module 2 : Les bases de Flutter
+                                </button>
+                            </h3>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#courseAccordion">
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled">
+                                        <li class="py-2 border-bottom"><i class="far fa-play-circle text-muted me-2"></i> Les widgets de base</li>
+                                        <li class="py-2 border-bottom"><i class="far fa-play-circle text-muted me-2"></i> Mise en page avec Row et Column</li>
+                                        <li class="py-2 border-bottom"><i class="far fa-play-circle text-muted me-2"></i> Navigation entre écrans</li>
+                                        <li class="py-2"><i class="fas fa-code text-muted me-2"></i> TP : Création d'une première application</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre latérale -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h3 class="h4">299€</h3>
+                        <p class="text-muted">Accès à vie</p>
+                        <a href="{% url 'courses:payment_options' course.slug %}" class="btn btn-primary text-white w-100 mb-3 fw-bold">
+                            Payer avec PayTech
+                        </a>
+                    </div>
+                    
+                    <h4 class="h5 mb-3">Ce cours comprend :</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-video text-primary me-2"></i> 50 heures de vidéo</li>
+                        <li class="mb-2"><i class="fas fa-file-alt text-primary me-2"></i> 20 ressources téléchargeables</li>
+                        <li class="mb-2"><i class="fas fa-mobile-alt text-primary me-2"></i> Accès sur mobile et TV</li>
+                        <li class="mb-2"><i class="fas fa-certificate text-primary me-2"></i> Certificat de fin de formation</li>
+                        <li class="mb-2"><i class="fas fa-question-circle text-primary me-2"></i> Accès au support</li>
+                    </ul>
+                    
+                    <hr>
+                    
+                    <h4 class="h5 mb-3">Formateur</h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-color: #e9ecef;">
+                            <i class="fas fa-user-tie fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 h6">Jean Dupont</h5>
+                            <small class="text-muted">Développeur Mobile</small>
+                        </div>
+                    </div>
+                    <p class="small text-muted">Développeur mobile expérimenté avec plus de 8 ans d'expérience dans le développement d'applications mobiles natives et multiplateformes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialisation des tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "account/base_account.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block body %}
+<body class="page-login">
+{% endblock %}
+
+{% block account_title %}{% trans "Connexion" %}{% endblock %}
+
+{% block account_content %}
+
+<style>
+/* ===== PAGE LOGIN UNIQUEMENT ===== */
+body.page-login {
+  background: linear-gradient(135deg, #4d9cff, #001f4d);
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 15px;
+}
+
+/* ===== FORMULAIRE ===== */
+.page-login form.login {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 35px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* TITRE */
+.page-login .account-title,
+.page-login h1,
+.page-login h2 {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+.page-login form.login input {
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #dce2f0;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.page-login form.login input:focus {
+  border-color: #4d9cff;
+  box-shadow: 0 0 10px rgba(77, 156, 255, 0.5);
+  outline: none;
+}
+
+/* BOUTON */
+.page-login form.login button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #006aff, #004cbc);
+  border: none;
+  color: white;
+  transition: 0.3s;
+}
+
+.page-login form.login button:hover {
+  background: linear-gradient(135deg, #0057d6, #003a96);
+  transform: translateY(-2px);
+}
+
+/* LIENS */
+.page-login form.login a {
+  color: #ffffff;
+  opacity: 0.9;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.page-login form.login a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <div class="d-grid gap-2">
+    <button class="btn btn-primary" type="submit">{% trans "Se connecter" %}</button>
+  </div>
+  <div class="text-center mt-3">
+    <a class="small" href="{% url 'account_signup' %}">Créer un compte</a> | 
+    <a class="small" href="{% url 'account_reset_password' %}">Mot de passe oublié ?</a>
+  </div>
+</form>
+
+{% endblock %}

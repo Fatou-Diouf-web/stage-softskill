@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Options de Paiement</h2>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <!-- Option 1 - Carte de crédit avec options déroulantes -->
+                        <div class="list-group-item p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="mb-1"><i class="fab fa-cc-visa me-2 text-primary"></i> Carte de crédit</h5>
+                                    <p class="mb-0 small text-muted">Paiement sécurisé par carte bancaire</p>
+                                </div>
+                                <button class="btn btn-outline-primary" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#creditCardOptions" 
+                                        aria-expanded="false" 
+                                        aria-controls="creditCardOptions">
+                                    Sélectionner
+                                </button>
+                            </div>
+                            
+                            <!-- Options de carte de crédit (cachées par défaut) -->
+                            <div class="collapse" id="creditCardOptions">
+                                <div class="card card-body border-0 p-3 bg-light">
+                                    <h6 class="mb-3">Saisissez les détails de votre carte :</h6>
+                                    <form id="creditCardForm" class="needs-validation" novalidate>
+                                        <div class="mb-3">
+                                            <label for="cardNumber" class="form-label small">Numéro de carte</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="far fa-credit-card"></i></span>
+                                                <input type="text" class="form-control" id="cardNumber" 
+                                                       placeholder="1234 5678 9012 3456" required
+                                                       pattern="\d{4}\s?\d{4}\s?\d{4}\s?\d{4}">
+                                            </div>
+                                            <div class="invalid-feedback">Veuillez entrer un numéro de carte valide (16 chiffres)</div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="expiryDate" class="form-label small">Date d'expiration</label>
+                                                <input type="text" class="form-control" id="expiryDate" 
+                                                       placeholder="MM/AA" required
+                                                       pattern="(0[1-9]|1[0-2])\/?([0-9]{2})">
+                                                <div class="invalid-feedback">Format: MM/AA</div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="cvv" class="form-label small">CVV</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="cvv" 
+                                                           placeholder="123" required
+                                                           pattern="\d{3,4}">
+                                                    <span class="input-group-text" data-bs-toggle="tooltip" 
+                                                          title="Les 3 ou 4 chiffres au dos de votre carte">
+                                                        <i class="fas fa-question-circle"></i>
+                                                    </span>
+                                                    <div class="invalid-feedback">Code de sécurité invalide</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="cardName" class="form-label small">Nom sur la carte</label>
+                                            <input type="text" class="form-control" id="cardName" 
+                                                   placeholder="Nom tel qu'il apparaît sur la carte" required>
+                                            <div class="invalid-feedback">Veuillez entrer le nom figurant sur la carte</div>
+                                        </div>
+                                        
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="saveCard" checked>
+                                            <label class="form-check-label small" for="saveCard">
+                                                Enregistrer cette carte pour de futurs paiements
+                                            </label>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-lock me-2"></i>Payer maintenant
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Option 2 - Paiement mobile avec options déroulantes -->
+                        <div class="list-group-item p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="mb-1"><i class="fas fa-mobile-alt me-2 text-primary"></i> Paiement mobile</h5>
+                                    <p class="mb-0 small text-muted">Paiement via votre opérateur mobile</p>
+                                </div>
+                                <button class="btn btn-outline-primary" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#mobilePaymentOptions" 
+                                        aria-expanded="false" 
+                                        aria-controls="mobilePaymentOptions">
+                                    Sélectionner
+                                </button>
+                            </div>
+                            
+                            <!-- Options de paiement mobile (cachées par défaut) -->
+                            <div class="collapse" id="mobilePaymentOptions">
+                                <div class="card card-body border-0 p-3 bg-light">
+                                    <h6 class="mb-3">Choisissez votre opérateur :</h6>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary text-start mobile-payment-btn" type="button" data-provider="orange-money">
+                                            <i class="fas fa-mobile-alt text-orange me-2"></i> Orange Money
+                                        </button>
+                                        <button class="btn btn-outline-primary text-start mobile-payment-btn" type="button" data-provider="wave">
+                                            <i class="fas fa-wave-square text-success me-2"></i> Wave
+                                        </button>
+                                        <button class="btn btn-outline-primary text-start mobile-payment-btn" type="button" data-provider="emoney">
+                                            <i class="fas fa-mobile-alt text-primary me-2"></i> E-Money
+                                        </button>
+                                        <button class="btn btn-outline-primary text-start mobile-payment-btn" type="button" data-provider="free-money">
+                                            <i class="fas fa-mobile-alt text-danger me-2"></i> Free Money
+                                        </button>
+                                        <button class="btn btn-outline-primary text-start mobile-payment-btn" type="button" data-provider="yup-wizall">
+                                            <i class="fas fa-mobile-alt text-warning me-2"></i> YUP 
+                                        </button>
+                                        <button class="btn btn-outline-primary text-start mobile-payment-btn" type="button" data-provider="yup-wizall">
+                                            <i class="fas fa-mobile-alt text-warning me-2"></i> Wizall 
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Formulaire de numéro de téléphone (caché par défaut) -->
+                                    <div id="phoneNumberForm" class="mt-3" style="display: none;">
+                                        <hr>
+                                        <div class="mb-3">
+                                            <label for="phoneNumber" class="form-label small">Numéro de téléphone</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                                <input type="tel" class="form-control" id="phoneNumber" 
+                                                       placeholder="Votre numéro de téléphone" required>
+                                            </div>
+                                            <div class="invalid-feedback">Veuillez entrer un numéro de téléphone valide</div>
+                                        </div>
+                                        <button id="confirmMobilePayment" class="btn btn-primary w-100">
+                                            <i class="fas fa-paper-plane me-2"></i>Confirmer le paiement
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if course %}
+                    <a href="{% url 'courses:course_detail' slug=course.slug %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour au cours
+                    </a>
+                    {% else %}
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour aux formations
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- JavaScript pour la gestion des interactions -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation des tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Gestion du formulaire de carte de crédit
+    const creditCardForm = document.getElementById('creditCardForm');
+    if (creditCardForm) {
+        creditCardForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            // Récupération des valeurs
+            const cardData = {
+                number: document.getElementById('cardNumber').value.replace(/\s+/g, ''),
+                expiry: document.getElementById('expiryDate').value,
+                cvv: document.getElementById('cvv').value,
+                name: document.getElementById('cardName').value,
+                save: document.getElementById('saveCard').checked
+            };
+            
+            // Ici, vous pouvez ajouter la logique de traitement du paiement
+            console.log('Traitement du paiement par carte...', cardData);
+            
+            // Simulation de traitement
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Traitement...';
+            
+            // Simuler un délai de traitement
+            setTimeout(() => {
+                // Réactiver le bouton
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+                
+                // Afficher un message de succès
+                alert('Paiement effectué avec succès !');
+                
+                // Redirection ou autre action après paiement
+                // window.location.href = '/payment/success/';
+            }, 2000);
+        });
+
+        // Formatage automatique du numéro de carte
+        const cardNumberInput = document.getElementById('cardNumber');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                e.target.value = value.trim();
+            });
+        }
+
+        // Formatage automatique de la date d'expiration
+        const expiryDateInput = document.getElementById('expiryDate');
+        if (expiryDateInput) {
+            expiryDateInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+    }
+
+    // Gestion des boutons de paiement mobile
+    const mobilePaymentButtons = document.querySelectorAll('.mobile-payment-btn');
+    const phoneNumberForm = document.getElementById('phoneNumberForm');
+    const phoneNumberInput = document.getElementById('phoneNumber');
+    const confirmMobilePaymentBtn = document.getElementById('confirmMobilePayment');
+    let selectedProvider = null;
+
+    mobilePaymentButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Mettre à jour le fournisseur sélectionné
+            selectedProvider = this.dataset.provider;
+            
+            // Mettre en surbrillance le bouton sélectionné
+            mobilePaymentButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Afficher le formulaire de numéro de téléphone
+            phoneNumberForm.style.display = 'block';
+            phoneNumberInput.focus();
+        });
+    });
+
+    // Gestion de la confirmation du paiement mobile
+    if (confirmMobilePaymentBtn) {
+        confirmMobilePaymentBtn.addEventListener('click', function() {
+            if (!phoneNumberInput.checkValidity()) {
+                phoneNumberForm.classList.add('was-validated');
+                return;
+            }
+
+            const phoneNumber = phoneNumberInput.value.trim();
+            
+            // Désactiver le bouton pendant le traitement
+            this.disabled = true;
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Traitement...';
+            
+            // Simuler un délai de traitement
+            setTimeout(() => {
+                // Réactiver le bouton
+                this.disabled = false;
+                this.innerHTML = originalText;
+                
+                // Afficher un message de succès
+                alert(`Paiement par ${selectedProvider} (${phoneNumber}) en cours de traitement...`);
+                
+                // Redirection ou autre action après confirmation
+                // window.location.href = `/payment/process/mobile/${selectedProvider}/`;
+            }, 1500);
+        });
+    }
+
+    // Validation en temps réel du numéro de téléphone
+    if (phoneNumberInput) {
+        phoneNumberInput.addEventListener('input', function() {
+            if (this.validity.patternMismatch) {
+                this.setCustomValidity('Veuillez entrer un numéro de téléphone valide');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+});
+</script>
+
+<style>
+/* Style personnalisé pour les boutons d'opérateurs */
+#mobilePaymentOptions .btn,
+#creditCardOptions .btn {
+    transition: all 0.3s;
+    margin-bottom: 0.5rem;
+}
+
+#mobilePaymentOptions .btn:hover,
+#creditCardOptions .btn:hover {
+    transform: translateX(5px);
+}
+
+/* Style pour les boutons actifs */
+#mobilePaymentOptions .btn.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+/* Couleurs personnalisées pour les icônes */
+.text-orange {
+    color: #ff6600;
+}
+
+/* Style pour le formulaire de carte de crédit */
+#creditCardOptions .form-control {
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+#creditCardOptions .input-group-text {
+    background-color: #f8f9fa;
+    border-right: none;
+}
+
+#creditCardOptions .form-control:focus + .input-group-text {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Animation pour les champs du formulaire */
+#creditCardOptions .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Style pour les messages d'erreur */
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback {
+    display: block;
+}
+
+/* Style pour les icônes de validation */
+.valid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #198754;
+}
+
+.was-validated .form-control:valid ~ .valid-feedback {
+    display: block;
+}
+
+/* Animation pour les boutons au survol */
+.btn-outline-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour les cartes de paiement */
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}

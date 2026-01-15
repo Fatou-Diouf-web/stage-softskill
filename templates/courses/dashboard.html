@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Soft Skills Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="mb-4">Dashboard</h1>
+            
+            <!-- Statistiques -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-graduation-cap text-primary mb-3" style="font-size: 2.5rem;"></i>
+                            <h3 class="card-title">{{ total_courses }}</h3>
+                            <p class="card-text text-muted">Formations suivies</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle text-success mb-3" style="font-size: 2.5rem;"></i>
+                            <h3 class="card-title">{{ completed_count }}</h3>
+                            <p class="card-text text-muted">Formations terminées</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-chart-line text-warning mb-3" style="font-size: 2.5rem;"></i>
+                            <h3 class="card-title">{{ progress_percentage|floatformat:1 }}%</h3>
+                            <p class="card-text text-muted">Progression globale</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Formations en cours -->
+            {% if in_progress_courses %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Formations en cours</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for enrollment in in_progress_courses %}
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 border rounded">
+                                <div class="flex-shrink-0">
+                                    {% if enrollment.course.thumbnail %}
+                                        <img src="{{ enrollment.course.thumbnail.url }}" alt="{{ enrollment.course.title }}" style="width: 60px; height: 60px; object-fit: cover;" class="rounded">
+                                    {% else %}
+                                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                            <i class="fas fa-image text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ enrollment.course.title }}</h6>
+                                    <div class="progress mb-2" style="height: 6px;">
+                                        <div class="progress-bar" style="width: {{ enrollment.progress_percentage }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ enrollment.progress_percentage|floatformat:1 }}% terminé</small>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="{% url 'courses:course_detail' enrollment.course.slug %}" class="btn btn-sm btn-primary">
+                                        Continuer
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Formations terminées -->
+            {% if completed_courses %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Formations terminées</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for enrollment in completed_courses %}
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 border rounded">
+                                <div class="flex-shrink-0">
+                                    {% if enrollment.course.thumbnail %}
+                                        <img src="{{ enrollment.course.thumbnail.url }}" alt="{{ enrollment.course.title }}" style="width: 60px; height: 60px; object-fit: cover;" class="rounded">
+                                    {% else %}
+                                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                            <i class="fas fa-image text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ enrollment.course.title }}</h6>
+                                    <small class="text-muted">Terminé le {{ enrollment.completed_at|date:"d/m/Y" }}</small>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-success">Terminé</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog - Soft Skills Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Blog</h1>
+    <div class="row g-4">
+        {% for post in posts %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                {% elif post.category.name == 'Leadership' %}
+                    <img src="/media/img/leadership.jpg" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                {% elif post.category.name == 'Soft Skills' %}
+                    <img src="/media/img/creativité-innovation.jpg" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                {% elif post.category.name == 'Développement Personnel' %}
+                    <img src="/media/img/devp.jpg" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-image text-white" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        {% if post.category.name == 'Développement personnel' %}
+                            <i class="fas fa-user-tie me-2 text-primary"></i>
+                        {% elif post.category.name == 'Communication' %}
+                            <i class="fas fa-comments me-2 text-primary"></i>
+                        {% elif post.category.name == 'Leadership' %}
+                            <i class="fas fa-users me-2 text-primary"></i>
+                        {% elif post.category.name == 'Gestion du temps' %}
+                            <i class="fas fa-clock me-2 text-primary"></i>
+                        {% elif post.category.name == 'Gestion du stress' %}
+                            <i class="fas fa-heartbeat me-2 text-primary"></i>
+                        {% elif post.category.name == 'Créativité' %}
+                            <i class="fas fa-lightbulb me-2 text-primary"></i>
+                        {% elif post.category.name == 'Intelligence émotionnelle' %}
+                            <i class="fas fa-smile me-2 text-primary"></i>
+                        {% elif post.category.name == 'Travail d\'équipe' %}
+                            <i class="fas fa-users-cog me-2 text-primary"></i>
+                        {% elif post.category.name == 'Négociation' %}
+                            <i class="fas fa-handshake me-2 text-primary"></i>
+                        {% elif post.category.name == 'Résolution de problèmes' %}
+                            <i class="fas fa-puzzle-piece me-2 text-primary"></i>
+                        {% else %}
+                            <i class="fas fa-newspaper me-2 text-primary"></i>
+                        {% endif %}
+                        <span class="badge bg-primary">{{ post.category.name }}</span>
+                    </div>
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text text-muted">{{ post.excerpt|truncatewords:15 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted"><i class="far fa-calendar-alt me-1"></i> {{ post.published_at|date:"d/m/Y" }}</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> {{ post.read_time_minutes }} min</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-outline-primary w-100">
+                        Lire l'article
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">Aucun article disponible pour le moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

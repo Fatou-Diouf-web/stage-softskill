@@ -1,0 +1,337 @@
+{% extends "account/base_account.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block account_title %}{% trans "Inscription" %}{% endblock %}
+
+{% block account_content %}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #e1e5ee;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #2d3748;
+    }
+    
+    .btn-submit {
+        background-color: #2563eb;
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 8px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-2px);
+    }
+    
+    .login-link {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .login-link:hover {
+        text-decoration: underline;
+    }
+    
+    .course-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .course-card:hover {
+        border-color: #2563eb;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .course-card.selected {
+        border: 2px solid #2563eb;
+        background-color: #f0f7ff;
+    }
+    
+    .course-card h5 {
+        margin-bottom: 0.5rem;
+        color: #2d3748;
+    }
+    
+    .course-card p {
+        color: #718096;
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        color: #2d3748;
+        margin: 2rem 0 1rem;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Styles pour le sélecteur personnalisé */
+    .custom-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .select-selected {
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        padding: 0.6rem 1rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .select-selected:hover {
+        border-color: #86b7fe;
+    }
+
+    .select-selected i {
+        transition: transform 0.3s ease;
+    }
+
+    .select-items {
+        position: absolute;
+        background-color: #fff;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 0.375rem 0.375rem;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .select-option {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.2s;
+    }
+
+    .select-option:hover {
+        background-color: #f8f9fa;
+    }
+
+    .select-option.selected {
+        background-color: #e9ecef;
+        font-weight: 500;
+    }
+
+    .select-option i {
+        margin-right: 0.5rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Animation pour la flèche */
+    .select-selected.active i {
+        transform: rotate(180deg);
+    }
+</style>
+
+<div class="form-container">
+    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        
+        <h4 class="text-center mb-4">Créez votre compte</h4>
+        
+        <!-- Informations personnelles -->
+        <h5 class="section-title">Informations personnelles</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="id_first_name">Prénom</label>
+                    <input type="text" name="first_name" id="id_first_name" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="id_last_name">Nom</label>
+                    <input type="text" name="last_name" id="id_last_name" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="id_email">Adresse email</label>
+            <input type="email" name="email" id="id_email" class="form-control" required>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="id_password1">Mot de passe</label>
+                    <input type="password" name="password1" id="id_password1" class="form-control" required>
+                    <small class="form-text text-muted">Au moins 8 caractères avec des chiffres et des lettres.</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="id_password2">Confirmer le mot de passe</label>
+                    <input type="password" name="password2" id="id_password2" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sélection des formations -->
+        <h5 class="section-title">Formations qui vous intéressent</h5>
+
+        <div class="form-group" style="position: relative;">
+            <div class="custom-select">
+                <div class="select-selected" onclick="toggleFormationList()">
+                    <span id="selected_formation">Sélectionnez une formation</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="formation_list" class="select-items">
+                    <div class="select-option" onclick="selectFormation(this, 'leadership')">
+                        <i class="fas fa-chess-king text-primary me-2"></i>Leadership
+                    </div>
+                    <div class="select-option" onclick="selectFormation(this, 'communication')">
+                        <i class="fas fa-comments text-primary me-2"></i>Communication
+                    </div>
+                    <div class="select-option" onclick="selectFormation(this, 'gestion_du_stress')">
+                        <i class="fas fa-heartbeat text-primary me-2"></i>Gestion du Stress
+                    </div>
+                    <div class="select-option" onclick="selectFormation(this, 'intelligence_emotionnelle')">
+                        <i class="fas fa-brain text-primary me-2"></i>Intelligence émotionnelle
+                    </div>
+                    <div class="select-option" onclick="selectFormation(this, 'php')">
+                        <i class="fab fa-php text-primary me-2"></i>PHP
+                    </div>
+                    <div class="select-option" onclick="selectFormation(this, 'Flutter')">
+                        <i class="fas fa-mobile-alt text-primary me-2"></i>Flutter
+                    </div>
+                </div>
+            </div>
+            <!-- Champs cachés pour le formulaire -->
+            <input type="hidden" name="interests" id="selected_interests">
+        </div>
+        
+        <div class="form-group form-check mt-4">
+            <input type="checkbox" class="form-check-input" id="terms" required>
+            <label class="form-check-label" for="terms">
+                J'accepte les <a href="#" class="text-primary">conditions d'utilisation</a> et la <a href="#" class="text-primary">politique de confidentialité</a>
+            </label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-submit mt-3">
+            Créer mon compte
+        </button>
+        
+        <p class="text-center mt-3">
+            Déjà inscrit ? <a href="{% url 'account_login' %}" class="login-link">Connectez-vous</a>
+        </p>
+    </form>
+</div>
+
+<script>
+    let selectedFormations = [];
+
+    function toggleFormationList() {
+        const list = document.getElementById("formation_list");
+        const select = document.querySelector('.select-selected');
+        const isActive = list.style.display === 'block';
+        
+        list.style.display = isActive ? 'none' : 'block';
+        select.classList.toggle('active', !isActive);
+        
+        // Fermer le menu si on clique ailleurs
+        if (!isActive) {
+            document.addEventListener('click', closeOnClickOutside);
+        } else {
+            document.removeEventListener('click', closeOnClickOutside);
+        }
+    }
+
+    function closeOnClickOutside(event) {
+        const selectContainer = document.querySelector('.custom-select');
+        if (!selectContainer.contains(event.target)) {
+            toggleFormationList();
+        }
+    }
+
+    function selectFormation(element, value) {
+        const index = selectedFormations.indexOf(value);
+        
+        if (index === -1) {
+            // Ajouter la formation
+            selectedFormations.push(value);
+            element.classList.add('selected');
+        } else {
+            // Retirer la formation
+            selectedFormations.splice(index, 1);
+            element.classList.remove('selected');
+        }
+        
+        // Mettre à jour le champ caché
+        document.getElementById('selected_interests').value = JSON.stringify(selectedFormations);
+        
+        // Mettre à jour le texte affiché
+        updateSelectedFormationsText();
+    }
+    
+    function updateSelectedFormationsText() {
+        const selectedText = document.getElementById('selected_formation');
+        if (selectedFormations.length === 0) {
+            selectedText.textContent = 'Sélectionnez une formation';
+        } else {
+            // Récupérer les noms des formations sélectionnées
+            const formationNames = [];
+            document.querySelectorAll('.select-option').forEach(option => {
+                if (selectedFormations.includes(option.getAttribute('onclick').match(/'([^']+)'/)[1])) {
+                    formationNames.push(option.textContent.trim());
+                }
+            });
+            selectedText.textContent = formationNames.join(', ');
+        }
+    }
+    
+    // Fermer le menu quand on clique sur une option
+    document.querySelectorAll('.select-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            // Ne pas fermer immédiatement pour permettre la sélection multiple
+            e.stopPropagation();
+        });
+    });
+</script>
+{% endblock %}

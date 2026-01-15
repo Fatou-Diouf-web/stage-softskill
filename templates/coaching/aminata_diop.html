@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Aminata Diop - Leadership et Développement Managérial{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Côté gauche - Photo et informations -->
+        <div class="col-lg-4">
+            <div class="card mb-4 border-0" style="background-color: #f8f9fa; border-radius: 15px;">
+                <div class="card-body text-center p-4">
+                    <div class="position-relative d-inline-block">
+                        <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-3" 
+                             style="width: 150px; height: 150px; margin: 0 auto;">
+                            <i class="fas fa-user-tie text-primary" style="font-size: 4rem;"></i>
+                        </div>
+                        <span class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2">
+                            <i class="fas fa-video"></i>
+                        </span>
+                    </div>
+                    
+                    <h4 class="mb-1">Aminata Diop</h4>
+                    <p class="text-primary fw-bold mb-3">Leadership et Développement Managérial</p>
+                    
+                    <!-- Note et expérience -->
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-star text-primary me-1"></i>
+                            <span>4.9/5</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user-graduate text-primary me-1"></i>
+                            <span>12 ans d'expérience</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Localisation et tarif -->
+                    <div class="text-start mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-map-marker-alt text-muted me-2" style="width: 24px;"></i>
+                            <span>Dakar, Sénégal</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-euro-sign text-muted me-2" style="width: 24px;"></i>
+                            <span>150€/h</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-globe text-muted me-2" style="width: 24px;"></i>
+                            <span>En ligne/Présentiel</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Bouton de réservation -->
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'coaching:book_session' coach.id %}" class="btn btn-primary btn-lg">
+                           <i class="fas fa-calendar-plus me-2"></i>Réserver une séance
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Côté droit - Détails -->
+        <div class="col-lg-8">
+            <!-- Section À propos -->
+            <div class="card border-0 mb-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">À propos de moi</h5>
+                    <p class="card-text">
+                        Experte en leadership transformationnel avec 12 ans d'expérience dans l'accompagnement des dirigeants et managers en Afrique de l'Ouest. 
+                        Mon approche allie les meilleures pratiques internationales avec une compréhension profonde des enjeux du marché africain.
+                    </p>
+                    <p class="card-text">
+                        Diplômée de HEC Paris et certifiée coach professionnelle ICF, j'ai accompagné plus de 200 dirigeants dans leur développement personnel et professionnel.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Section Compétences -->
+            <div class="card border-0 mb-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Domaines d'expertise</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-primary me-2"></i>
+                                <span>Leadership transformationnel</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-primary me-2"></i>
+                                <span>Développement du leadership féminin</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-primary me-2"></i>
+                                <span>Gestion des équipes multiculturelles</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-primary me-2"></i>
+                                <span>Prise de parole en public</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Expérience -->
+            <div class="card border-0" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Parcours professionnel</h5>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="fas fa-briefcase text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Fondatrice et Directrice Générale</h6>
+                            <p class="text-muted mb-1">Leadership Afrique | 2018 - Présent</p>
+                            <p class="mb-0">Cabinet de conseil en leadership et développement organisationnel basé à Dakar, intervenant dans toute l'Afrique de l'Ouest.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="fas fa-chalkboard-teacher text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Responsable du Développement des Talents</h6>
+                            <p class="text-muted mb-1">Groupe Sonatel | 2012 - 2018</p>
+                            <p class="mb-0">Conception et animation de programmes de développement du leadership pour les hauts potentiels.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Méthodologie -->
+            <div class="card border-0 mt-4" style="border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Ma méthode</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center p-3 bg-light rounded-3 h-100">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-search fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Diagnostic personnalisé</h6>
+                                <p class="small text-muted mb-0">Analyse approfondie de vos besoins et objectifs spécifiques</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center p-3 bg-light rounded-3 h-100">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-tools fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Plan d'action sur mesure</h6>
+                                <p class="small text-muted mb-0">Élaboration d'une feuille de route claire et mesurable</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center p-3 bg-light rounded-3 h-100">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-chart-line fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Accompagnement continu</h6>
+                                <p class="small text-muted mb-0">Suivi régulier et ajustements pour garantir les résultats</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn {
+        transition: all 0.3s ease;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+    }
+    .bg-primary {
+        background-color: #0d6efd !important;
+    }
+    .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+    }
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+        color: #fff;
+    }
+    .text-primary {
+        color: #0d6efd !important;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Font Awesome pour les icônes -->
+<script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - Blog{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'courses:home' %}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'blog:post_list' %}">Blog</a></li>
+                    <li class="breadcrumb-item active">{{ post.title }}</li>
+                </ol>
+            </nav>
+
+            <!-- Article -->
+            <article class="card">
+                {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 400px; object-fit: cover;">
+                {% elif post.category.name == 'Leadership' %}
+                    <img src="/media/img/leadership.jpg" class="card-img-top" alt="{{ post.title }}" style="height: 400px; object-fit: cover;">
+                {% elif post.category.name == 'Soft Skills' %}
+                    <img src="/media/img/creativité-innovation.jpg" class="card-img-top" alt="{{ post.title }}" style="height: 400px; object-fit: cover;">
+                {% elif post.category.name == 'Développement Personnel' %}
+                    <img src="/media/img/devp.jpg" class="card-img-top" alt="{{ post.title }}" style="height: 400px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-newspaper text-white" style="font-size: 4rem;"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-primary">{{ post.category.name }}</span>
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>{{ post.published_at|date:"d/m/Y" }}
+                            <i class="fas fa-book-open ms-3 me-1"></i>{{ post.read_time_minutes }} min
+                        </small>
+                    </div>
+                    
+                    <h1 class="card-title mb-3">{{ post.title }}</h1>
+                    
+                    {% if post.excerpt %}
+                        <p class="lead text-muted mb-4">{{ post.excerpt }}</p>
+                    {% endif %}
+                    
+                    <div class="mb-4">
+                        <small class="text-muted">
+                            <i class="fas fa-user me-1"></i>Par {{ post.author.get_full_name }}
+                        </small>
+                    </div>
+                    
+                    <div class="article-content">
+                        {{ post.content|linebreaks }}
+                    </div>
+                </div>
+            </article>
+
+            <!-- Tags -->
+            {% if post.tags.all %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="card-title">Tags :</h6>
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'blog:tag_detail' tag.slug %}" class="badge bg-secondary text-decoration-none me-2">
+                            {{ tag.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Commentaires -->
+            {% if post.allow_comments %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-comments me-2"></i>Commentaires ({{ post.comment_count }})
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                        <form method="post" class="mb-4">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <textarea class="form-control" name="content" rows="3" placeholder="Ajouter un commentaire..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Publier</button>
+                        </form>
+                    {% else %}
+                        <p class="text-muted">Connectez-vous pour laisser un commentaire.</p>
+                    {% endif %}
+                    
+                    <!-- Liste des commentaires -->
+                    {% for comment in post.comments.all %}
+                        {% if comment.is_approved %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-user-circle text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ comment.author.get_full_name }}</h6>
+                                    <small class="text-muted">{{ comment.created_at|date:"d/m/Y H:i" }}</small>
+                                    <p class="mt-2 mb-0">{{ comment.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

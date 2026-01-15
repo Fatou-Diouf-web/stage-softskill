@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Recherche - {{ query }} - Soft Skills Platform{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- En-tête de recherche -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'courses:home' %}">Accueil</a></li>
+                    <li class="breadcrumb-item active">Recherche</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-2">
+                        <i class="fas fa-search text-primary me-2"></i>Résultats de recherche
+                    </h1>
+                    {% if query %}
+                    <p class="text-muted mb-0">
+                        {{ courses.paginator.count }} formation{{ courses.paginator.count|pluralize:"s" }} trouvée{{ courses.paginator.count|pluralize:"s" }} pour "{{ query }}"
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="text-end">
+                    <small class="text-muted">Trié par {{ sort_by|title }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres avancés -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="q" class="form-label">Recherche</label>
+                            <input type="text" class="form-control" id="q" name="q" value="{{ query }}" placeholder="Rechercher une formation...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="category" class="form-label">Catégorie</label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="">Toutes</option>
+                                {% for category in categories %}
+                                <option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="level" class="form-label">Niveau</label>
+                            <select class="form-select" id="level" name="level">
+                                <option value="">Tous</option>
+                                <option value="debutant" {% if selected_level == 'debutant' %}selected{% endif %}>Débutant</option>
+                                <option value="intermediaire" {% if selected_level == 'intermediaire' %}selected{% endif %}>Intermédiaire</option>
+                                <option value="avance" {% if selected_level == 'avance' %}selected{% endif %}>Avancé</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="price" class="form-label">Prix</label>
+                            <select class="form-select" id="price" name="price">
+                                <option value="">Tous</option>
+                                <option value="free" {% if selected_price == 'free' %}selected{% endif %}>Gratuit</option>
+                                <option value="paid" {% if selected_price == 'paid' %}selected{% endif %}>Payant</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="sort" class="form-label">Tri</label>
+                            <select class="form-select" id="sort" name="sort">
+                                <option value="relevance" {% if sort_by == 'relevance' %}selected{% endif %}>Pertinence</option>
+                                <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Plus récent</option>
+                                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Titre</option>
+                                <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Prix</option>
+                                <option value="duration" {% if sort_by == 'duration' %}selected{% endif %}>Durée</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>Rechercher
+                            </button>
+                            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary ms-2">
+                                <i class="fas fa-times me-2"></i>Effacer
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Résultats -->
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm hover-lift">
+                {% if course.image %}
+                <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-book fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-2">
+                        <span class="badge bg-primary me-1">{{ course.category.name }}</span>
+                        {% if course.difficulty_level %}
+                        <span class="badge bg-info">{{ course.difficulty_level|title }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="card-text text-muted">{{ course.description|truncatewords:20 }}</p>
+                    
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-muted me-1"></i>
+                                <small class="text-muted">{{ course.duration_hours }} heures</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-muted me-1"></i>
+                                <small class="text-muted">{{ course.enrolled_students.count }} inscrits</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 text-primary mb-0">
+                                {% if course.is_free %}
+                                <span class="badge bg-success">Gratuit</span>
+                                {% else %}
+                                {{ course.price }}€
+                                {% endif %}
+                            </span>
+                            <a href="{% url 'courses:course_detail' course.slug %}" class="btn btn-outline-primary">
+                                Voir détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">
+                    {% if query %}
+                    Aucun résultat trouvé pour "{{ query }}"
+                    {% else %}
+                    Aucune formation trouvée
+                    {% endif %}
+                </h4>
+                <p class="text-muted mb-4">Essayez de modifier vos critères de recherche</p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-primary">
+                        <i class="fas fa-list me-2"></i>Voir toutes les formations
+                    </a>
+                    <a href="{% url 'courses:home' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home me-2"></i>Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if courses.has_other_pages %}
+    <nav aria-label="Navigation des résultats" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if courses.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_level %}&level={{ selected_level }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for num in courses.paginator.page_range %}
+            {% if courses.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > courses.number|add:'-3' and num < courses.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_level %}&level={{ selected_level }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if courses.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ courses.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_level %}&level={{ selected_level }}{% endif %}{% if selected_price %}&price={{ selected_price }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+.hover-lift {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    border-radius: 15px 15px 0 0;
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 8px 20px;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+}
+
+.breadcrumb-item a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
